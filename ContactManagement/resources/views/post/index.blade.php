@@ -62,8 +62,8 @@
                                 <tr>
                           <td>{{$post->id}}</td>
                           <td style="width: 35%">{{$post->title}}</td>
-                          <td>{{$post->users->name}}</td>
-                          <td>T{{$post->category->name}}</td>
+                          <td>{{$post->name}}</td>
+                          <td>T{{$post->category}}</td>
                           <td align ="center">2</td>
                           <td style="width: 250px">
                             <a href="{{route('post.show', $post->id)}}" class="btn btn-primary">View</a>

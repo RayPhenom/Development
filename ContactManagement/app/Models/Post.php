@@ -10,13 +10,25 @@ use App\Models\Post;
 use App\Models\Tag;
 use App\Models\Category;
 use App\Models\User;
-use App\Models\Comment; 
-use App\Models\Like;
-use App\Models\Dislike;
-use App\Models\View;
-use App\Models\Bookmark;
-use App\Models\Report;
-use App\Models\Subscription; 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Database\Eloquent\Relations\MorphedByMany;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
+use Illuminate\Database\Eloquent\Relations\MorphOneOrMany;
+use Illuminate\Database\Eloquent\Relations\MorphToManyOrMany;
+use Illuminate\Database\Eloquent\Relations\MorphedByManyOrMany;
+use Illuminate\Database\Eloquent\Relations\HasManyOrMany;
+use Illuminate\Database\Eloquent\Relations\MorphToOrMany;
+use Illuminate\Database\Eloquent\Relations\MorphOneThroughOrMany;
+use Illuminate\Database\Eloquent\Relations\MorphToManyThroughOrMany;
+
 
 class Post extends Model
 {
@@ -27,7 +39,7 @@ class Post extends Model
 
    }
    
-   public function user(){
+   public function users(){
       return $this->belongsToMany('App\Models\User');
      }
      

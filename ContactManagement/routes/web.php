@@ -38,3 +38,4 @@ Route::get('/posts/{id}', [PostController::class, 'show'])->name('posts.show');
 Route::get('/posts/{id}/edit', [PostController::class, 'edit'])->name('posts.edit');
 Route::put('/posts/{id}/update', [PostController::class, 'update'])->name('posts.update');
 Route::delete('/posts/{id}/destroy', [PostController::class, 'destroy'])->name('posts.destroy');
+Route::get('/post/{id}/users', [PostController::class, 'showUsers']);
