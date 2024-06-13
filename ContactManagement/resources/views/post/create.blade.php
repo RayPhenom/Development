@@ -49,7 +49,7 @@
                                 @if($categories->count()>0)
                                 @foreach($categories as $category)
                                 <option value="{{$category->id}}" 
-                                {{(old('category')&& old('category')==$category->id)?'selected':''}} 
+                                {{(old('category') && old('category') == $category -> id)?'selected':''}} 
                                 >{{$category->name}}
                             </option>
                                 @endforeach
@@ -68,7 +68,7 @@
                                 @if($tags->count()>0)
                                 @foreach($tags as $tags)
                                 <option value="{{$tags->id}}" 
-                                {{(old('tags')&& in_array($tags->id,old('tags')) )?'selected':''}}>
+                                {{(old('tags') && in_array($tags->id,old('tags')) )?'selected':''}}>
                                 {{$tags->name}}
                                     </option>
                                     @endforeach

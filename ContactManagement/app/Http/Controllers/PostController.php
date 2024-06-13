@@ -4,11 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Post;
+use App\Models\Post;
 use App\User;
 use App\Comment;
 use App\Models\Category;
 use App\Models\Tag;
+use App\Models\Like;
+use App\Models\Dislike;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 
 class PostController extends Controller
 {
@@ -17,9 +24,22 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $requested)
     {
-        return view('post.index',);
+        $data['categories'] = Category::orderBy('id', 'desc')->get();
+        $post_query = Post::where('user_id', auth()->id());
+
+        if($requested ->category){
+            $post_query->whereHas('category_id', function($q) use($requested){
+                $q->where('name', $requested->category);
+            });
+        }
+        if($requested ->keyword){
+          $post_query->where('title', 'LIKE', '%'.$requested->keyword.'%');
+
+        }
+        $data['posts'] = $post_query->orderBy('id', 'DESC')->paginate(2);
+        return view('post.index', $data);
     }
 
     /**
@@ -42,16 +62,36 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $request ->validate([
-            'title'=>'required|max:255',
-            'description'=>'required',
-            'image'=>'required|mimes:jpeg,jpg,png',
-            'category'=>'required',
-            'tags'=>'required|array ',
-        ],[
-            'category.required'=>'Please select a category',
-            'tags.required'=>'Please select atleast one tag',
+        $request->validate([
+            'title' => 'required|max:255',
+            'description' => 'required',
+            'image' => 'required|mimes:jpeg,jpg,png',
+            'category' => 'required',
+            'tags' => 'required|array',
+        ], [
+            'category.required' => 'Please select a category',
+            'tags.required' => 'Please select at least one tag',
         ]);
+
+        if ($request->hasFile('image')) {
+            $image=$request->file('image');
+
+
+            $image_name=time().'.'.$image->extension();
+            $image->move(public_path('post_images'), $image_name);
+        }
+
+        $post = Post::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'image' => $image_name,
+            'user_id'=>Auth::user()->id,
+            'category_id'=> $request->category,
+        ]);
+
+        $post->tags()->sync($request->tags);
+
+        return redirect()->route('post.index')->with('success', 'Post created Successfully');
     }
 
     /**

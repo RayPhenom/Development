@@ -20,6 +20,14 @@
                                 <label for="category_filter">Filter By Category &nbsp; </label>
                                 <select class="form-control" id="category_filter" name="category">
                                  <option value="">Select Category</option>
+                                 @if($categories->count()>0)
+                                @foreach($categories as $category)
+                                <option value="{{$category->name}}" 
+                                {{(old('category') && old('category') == $category -> id)?'selected':''}} 
+                                >{{$category->name}}
+                            </option>
+                                @endforeach
+                                @endif
                               </select>  
                               <label for="status_filter">Filter By Status &nbsp; </label>
                               <input type="text" class="form-control" id="keyword" placeholder="Enter Keyword " id="keyword">
@@ -49,20 +57,26 @@
                         </tr>
                       </thead>
                       <tbody>
-
-                        <tr>
-                          <td>1</td>
-                          <td style="width: 35%">Post Title</td>
-                          <td>Onix Lumumba</td>
-                          <td>Technology</td>
+                      @if(count($posts))
+                                @foreach($posts as $post)
+                                <tr>
+                          <td>{{$post->id}}</td>
+                          <td style="width: 35%">{{$post->title}}</td>
+                          <td>{{$post->users->name}}</td>
+                          <td>T{{$post->category->name}}</td>
                           <td align ="center">2</td>
                           <td style="width: 250px">
-                            <a href="#" class="btn btn-primary">View</a>
-                            <a href="#" class="btn btn-success">Edit</a>
+                            <a href="{{route('post.show', $post->id)}}" class="btn btn-primary">View</a>
+                            <a href="{{route('post.edit', $post->id)}" class="btn btn-success">Edit</a>
                             <a href="#" class="btn btn-danger">Delete</a>
                           </td>
-                        </tr>
-
+                        </tr>    
+                         @endforeach
+                            @else
+                                <tr>
+                                  <td colspan="6">No Posts Found</td>
+                                </tr>
+                                @endif
                        </tbody>
                         </table>
                      
