@@ -30,8 +30,10 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [HomeController::class, 'home'])->name('home');
+//Changed the 'home' to 'index' since in your method(HomeController) you defined an index class function for returning the home page while in your route you had called a 'home' class thus the error!
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/posts', [PostController::class, 'index'])->name('post.index');
+Route::get('/post/{id}', [PostController::class, 'show'])->name('post.show');
 Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
 Route::post('/posts/store', [PostController::class, 'store'])->name('posts.store');
 Route::get('/posts/{id}', [PostController::class, 'show'])->name('posts.show');

@@ -22,22 +22,22 @@
                                  <option value="">Select Category</option>
                                  @if($categories->count()>0)
                                 @foreach($categories as $category)
-                                <option value="{{$category->name}}" 
-                                {{(old('category') && old('category') == $category -> id)?'selected':''}} 
+                                <option value="{{$category->name}}"
+                                {{(old('category') && old('category') == $category -> id)?'selected':''}}
                                 >{{$category->name}}
                             </option>
                                 @endforeach
                                 @endif
-                              </select>  
+                              </select>
                               <label for="status_filter">Filter By Status &nbsp; </label>
                               <input type="text" class="form-control" id="keyword" placeholder="Enter Keyword " id="keyword">
                               <span>&nbsp;</span>
                               <button type="button" class="btn btn-primary">Search</button>
 
                               <a href="#" class="btn btn-success">Clear</a>
-                              
-                        
-                    
+
+
+
                         </form>
                     </div>
                    <div class="table-responsive">
@@ -62,15 +62,15 @@
                                 <tr>
                           <td>{{$post->id}}</td>
                           <td style="width: 35%">{{$post->title}}</td>
-                          <td>{{$post->name}}</td>
-                          <td>T{{$post->category}}</td>
+                          <td>{{$post->user->name}}</td>
+                          <td>T{{$post->category->name}}</td>
                           <td align ="center">2</td>
                           <td style="width: 250px">
                             <a href="{{route('post.show', $post->id)}}" class="btn btn-primary">View</a>
                             <a href="{{route('post.edit', $post->id)}" class="btn btn-success">Edit</a>
                             <a href="#" class="btn btn-danger">Delete</a>
                           </td>
-                        </tr>    
+                        </tr>
                          @endforeach
                             @else
                                 <tr>
@@ -79,10 +79,10 @@
                                 @endif
                        </tbody>
                         </table>
-                     
+
                     </div>
                    </div>
-                   
+
                 </div>
             </div>
         </div>

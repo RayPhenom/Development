@@ -100,9 +100,13 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+     //on your index when you click view, it takes you on the post page for that selected post or clicked post on your table.
     public function show($id)
     {
-        //
+
+        $post=  Post::findOrFail($id);
+        return view('post.show', compact('post'));
     }
 
     /**
