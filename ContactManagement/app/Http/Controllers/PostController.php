@@ -136,7 +136,38 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $post = Post::findOrFail($id);
+        $request->validate([
+            'title' => 'required|max:255',
+            'description' => 'required',
+            'image' => 'required|mimes:jpeg,jpg,png',
+            'category' => 'required',
+            'tags' => 'required|array',
+        ], [
+            'category.required' => 'Please select a category',
+            'tags.required' => 'Please select at least one tag',
+        ]);
+
+
+        
+        if ($request->hasFile('image')) {
+            $image=$request->file('image');
+
+
+            $image_name=time().'.'.$image->extension();
+            $image->move(public_path('post_images'), $image_name);
+        }
+
+        $post = Post::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'image' => $image_name,
+            'user_id'=>Auth::user()->id,
+            'category_id'=> $request->category,
+        ]);
+
+        $post->tags()->sync($request->tags);
+
     }
 
     /**

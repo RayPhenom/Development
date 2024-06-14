@@ -50,4 +50,13 @@ class Post extends Model
      public function comments(){
       return $this->hasMany('App\Models\Comment');
      }
+     public function getTagsIdArray(){
+      $id_array=[];
+      if(count($this->tags)>0){
+         foreach($this->tags as $tag){
+            $id_array[]=$tag->id;
+         }
+      }
+      return $id_array;
+     }
 }
