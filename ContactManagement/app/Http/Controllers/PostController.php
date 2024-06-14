@@ -38,7 +38,11 @@ class PostController extends Controller
           $post_query->where('title', 'LIKE', '%'.$requested->keyword.'%');
 
         }
-        $data['posts'] = $post_query->orderBy('id', 'DESC')->paginate(2);
+        if($requested ->sortByComments && in_array($requested ->sortByComments, ['asc', 'desc'])){
+            $post_query->orderBy('comments_count', '$requested ->sortByComments');
+  
+          }
+        $data['posts'] = $post_query->orderBy('id', 'DESC')->paginate(5);
         return view('post.index', $data);
     }
 
@@ -117,7 +121,10 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data['post'] = Post::findOrFail($id);
+        $data['categories'] = Category::orderBy('id', 'desc')->get();
+        $data['tags'] = Tag::orderBy('id', 'desc')->get();
+        return view('post.edit', $data);
     }
 
     /**

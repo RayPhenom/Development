@@ -20,10 +20,9 @@
                                 <label for="category_filter">Filter By Category &nbsp; </label>
                                 <select class="form-control" id="category_filter" name="category">
                                  <option value="">Select Category</option>
-                                 @if($categories->count()>0)
+                                 @if($categories->Count()>0)
                                 @foreach($categories as $category)
-                                <option value="{{$category->name}}"
-                                {{(old('category') && old('category') == $category -> id)?'selected':''}}
+                                <option value="{{$category->name}}" {{(Request::query('category') && Request::query('category')== $category->name)?'selected':''}}
                                 >{{$category->name}}
                             </option>
                                 @endforeach
@@ -32,12 +31,12 @@
                               <label for="status_filter">Filter By Status &nbsp; </label>
                               <input type="text" class="form-control" id="keyword" placeholder="Enter Keyword " id="keyword">
                               <span>&nbsp;</span>
-                              <button type="button" class="btn btn-primary">Search</button>
+                              <button type="button" onclick="search_posts()" class="btn btn-primary">Search</button>
 
-                              <a href="#" class="btn btn-success">Clear</a>
+                              @if(Request::query('category')||Request::query('keyword'))
 
-
-
+                              <a href="{{route('post.index')}}" class="btn btn-success">Clear</a>
+                              @endif
                         </form>
                     </div>
                    <div class="table-responsive">
@@ -49,9 +48,17 @@
                           <th>Created By</th>
                           <th>Category</th>
                           <th>Total Comments
-                            <a href="#"><i class="fas fa-sort-down"></I></a>
-                            <a href="#"><i class="fas fa-sort-up"></I></a>
-                            <a href="#"><i class="fas fa-sort"></I></a>
+                            @if(Request::query('sortByComments') && Request::query('sortByComments')=='asc')
+                            <a href="javascript:sort('desc')"><i class="fas fa-sort-down"></I></a>
+
+                            @elseif(Request::query('sortByComments') && Request::query('sortByComments')=='desc')
+                            <a href="javascript:sort('asc')"><i class="fas fa-sort-up"></I></a>
+
+                            @else
+                            <a href="javascript:sort('asc')"><i class="fas fa-sort"></I></a>
+
+                            @endif
+                           
                           </th>
                           <th>Actions</th>
                         </tr>
@@ -64,7 +71,7 @@
                           <td style="width: 35%">{{$post->title}}</td>
                           <td>{{$post->user->name}}</td>
                           <td>T{{$post->category->name}}</td>
-                          <td align ="center">2</td>
+                          <td align ="center">{{$post->comments_Count}}</td>
                           <td style="width: 250px">
                             <a href="{{route('post.show', $post->id)}}" class="btn btn-primary">View</a>
                             <a href="{{route('post.edit', $post->id)}" class="btn btn-success">Edit</a>
@@ -89,3 +96,23 @@
     </div>
 </div>
 @endsection
+
+@section('javascript')
+<script type="text/javascript">
+  var query=<?php echo json_encode((object)Request::query()); ?>;
+
+  
+  function search post(){
+
+    object.assign(query,{'category':$('#category_filter').val()});
+    object.assign(query,{'keyword':$('#keyword').val()});
+
+    window.location.href = "{{route('post.index')}}?"+$.param(query);
+  }
+  function sort(value){
+    object.assign(query,{'sortByComments': value});
+
+    window.location.href = "{{route('post.index')}}?"+$.param(query);
+  }
+  </script>
+  @endsection
